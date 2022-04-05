@@ -5,13 +5,16 @@ function App() {
     const [isOn, setIsOn] = useState(false)
     const [minute, setMinute] = useState(0);
     const [second, setSecond] = useState(60);
+    const [finished, setFinished] = useState(false);
 
     const intervalId1 = useRef(1);
 
+    let audio = new Audio('/DiVeNha.m4a');
+
     const playAlarm = () => {
-        let audio = new Audio('/DiVeNha.m4a');
-        audio.play().then(r => console.log("PLAYED"));
+        audio.play().then(r => console.log(r));
     }
+
     useEffect(() => {
         if (isOn) {
             intervalId1.current = setInterval(() => {
@@ -35,6 +38,7 @@ function App() {
                 setSecond(0);
                 setMinute(0);
                 playAlarm();
+                setFinished(true);
             }
         }
     }, [minute, second, isOn])
@@ -43,9 +47,18 @@ function App() {
         setIsOn(true);
     }
 
+    const reset = () => {
+        audio = null;
+        setIsOn(false);
+        setMinute(1);
+        setSecond(60);
+        setFinished(false);
+    }
+
     return (
         <div className="App">
             <button onClick={start}>Start</button>
+            {finished ? <button onClick={reset}>Reset</button> : null}
             {isOn ? <h2>{minute < 10 ? `0${minute}` : minute} : {second < 10 ? `0${second}` : second}</h2> : null}
 
 
