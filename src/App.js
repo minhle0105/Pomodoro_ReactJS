@@ -2,6 +2,7 @@ import './App.css';
 import {useEffect, useRef, useState} from "react";
 
 function App() {
+    // control state
     const [isOn, setIsOn] = useState(false)
     const [minute, setMinute] = useState(25);
     const [second, setSecond] = useState(0);
@@ -9,12 +10,14 @@ function App() {
     const [audio, setAudio] = useState(new Audio('/DiVeNha.m4a'))
     const [breakTitle, setBreakTitle] = useState('');
 
+    // title constants
     const breakTimeTitle = 'BREAK TIME';
     const workingTimeTitle = 'WORKING TIME';
 
+    // used for controlling the countdown
     const intervalId1 = useRef(1);
 
-
+    // control clock countdown for seconds
     useEffect(() => {
         if (isOn) {
             intervalId1.current = setInterval(() => {
@@ -34,6 +37,7 @@ function App() {
         }
     }, [isOn])
 
+    // control clock count down for minutes
     useEffect(() => {
         if (isOn) {
             if (second === 1) {
@@ -42,6 +46,7 @@ function App() {
         }
     }, [second, isOn])
 
+    // control playing alarm when time's up
     useEffect(() => {
         if (isOn) {
             if (minute === 0 && second === 1) {
@@ -55,11 +60,13 @@ function App() {
         }
     }, [minute, second, isOn, audio])
 
+    // handle start
     const start = () => {
         setIsOn(true);
         setBreakTitle(workingTimeTitle);
     }
 
+    // handle reset
     const reset = () => {
         audio.pause();
         setAudio(new Audio('/DiVeNha.m4a'));
@@ -70,6 +77,7 @@ function App() {
         setBreakTitle('');
     }
 
+    // handle pause
     const pause = () => {
         clearInterval(intervalId1.current);
         setIsOn(false);
